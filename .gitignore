@@ -1,0 +1,21 @@
+﻿# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# SQLite database files
+data.sqlite
+data.sqlite-*
+*.sqlite
+*.sqlite3
+
+# Temp uploads and runtime files
+tmp/
+*.log
+
+# OS/editor
+.DS_Store
+Thumbs.db

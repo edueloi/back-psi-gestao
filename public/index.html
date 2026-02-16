@@ -1,0 +1,174 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PsiGestao API</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: rgba(17, 24, 39, 0.8);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: rgba(148, 163, 184, 0.25);
+      --brand: #22d3ee;
+      --brand-2: #60a5fa;
+      --ok: #34d399;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 20% -20%, rgba(34, 211, 238, 0.22), transparent 60%),
+        radial-gradient(800px 500px at 110% 20%, rgba(96, 165, 250, 0.18), transparent 55%),
+        var(--bg);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .wrap {
+      width: min(980px, 100%);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 20px 60px rgba(2, 6, 23, 0.55);
+      overflow: hidden;
+    }
+    .hero {
+      padding: 28px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 30px;
+      letter-spacing: 0.2px;
+    }
+    .sub { color: var(--muted); margin: 0; }
+    .badge {
+      align-self: flex-start;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      color: #bbf7d0;
+      background: rgba(16, 185, 129, 0.12);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .grid {
+      padding: 22px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(15, 23, 42, 0.45);
+    }
+    .card h3 { margin: 0 0 10px; font-size: 14px; color: #bae6fd; letter-spacing: .2px; }
+    .routes { margin: 0; padding-left: 16px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .routes code { color: #e2e8f0; }
+    .actions {
+      padding: 0 22px 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    a.btn {
+      text-decoration: none;
+      border: 1px solid rgba(96, 165, 250, 0.5);
+      color: #dbeafe;
+      background: rgba(59, 130, 246, 0.14);
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    a.btn:hover { background: rgba(59, 130, 246, 0.25); }
+    .foot {
+      border-top: 1px solid var(--line);
+      padding: 10px 22px 14px;
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(52,211,153,.7); animation: pulse 1.8s infinite; }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(52,211,153,.7); }
+      70% { box-shadow: 0 0 0 10px rgba(52,211,153,0); }
+      100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1>PsiGestao Backend</h1>
+        <p class="sub">API de produção em <code>/api</code> para usuários, livro-caixa, importação/exportação e dashboard.</p>
+      </div>
+      <div class="badge"><span class="pulse"></span> API ativa</div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h3>Autenticação/Usuários</h3>
+        <ul class="routes">
+          <li><code>GET /api/users</code></li>
+          <li><code>POST /api/users</code></li>
+          <li><code>PUT/PATCH/DELETE /api/users/:id</code></li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Livro Caixa</h3>
+        <ul class="routes">
+          <li><code>GET /api/transactions</code></li>
+          <li><code>POST /api/transactions</code></li>
+          <li><code>PUT/PATCH/DELETE /api/transactions/:id</code></li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Planilhas</h3>
+        <ul class="routes">
+          <li><code>POST /api/transactions/import</code></li>
+          <li><code>GET /api/transactions/export?format=csv|xlsx|json</code></li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Dashboard e Relatórios</h3>
+        <ul class="routes">
+          <li><code>GET /api/dashboard/summary</code></li>
+          <li><code>GET /api/dashboard/charts</code></li>
+          <li><code>GET /api/reports/dre</code></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="actions">
+      <a class="btn" href="/api/health" target="_blank" rel="noreferrer">Testar health</a>
+      <a class="btn" href="/api/transactions?limit=10" target="_blank" rel="noreferrer">Listar transações</a>
+      <a class="btn" href="/api/dashboard/summary" target="_blank" rel="noreferrer">Ver resumo</a>
+    </section>
+
+    <footer class="foot">
+      <span>Frontend: <code>https://psigestao.develoi.com</code></span>
+      <span>Backend: <code>/api</code></span>
+    </footer>
+  </main>
+</body>
+</html>

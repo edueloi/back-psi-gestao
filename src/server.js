@@ -20,27 +20,44 @@ const PORT = Number(process.env.PORT || 3001);
 const API_PREFIX = process.env.API_PREFIX || "/api";
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "https://psigestao.develoi.com";
 
+const extraOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 const allowedOrigins = new Set([
   FRONTEND_ORIGIN,
   "https://psigestao.develoi.com",
   "http://localhost:5173",
+  "http://localhost:4200",
   "http://127.0.0.1:5173",
+  "https://66ji86xsmr1k42e90gv4z7unefgcefnkjzq5j1xy5qjq465gdm-h868144788.scf.usercontent.goog",
+  "https://3vhtj365771gsxzpm0l07lr0hn205uig18f642tjn66ix0bkq8-h868144788.scf.usercontent.goog",
+  ...extraOrigins,
 ]);
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.has(origin)) {
-        callback(null, true);
-        return;
-      }
-      callback(new Error("Origin not allowed by CORS"));
-    },
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.has(origin)) return callback(null, true);
+    return callback(new Error(`CORS blocked: ${origin}`), false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json({ limit: "15mb" }));
+
+const PUBLIC_DIR = path.join(__dirname, "..", "public");
+app.use(express.static(PUBLIC_DIR));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, "index.html"));
+});
 
 function nowIso() {
   return new Date().toISOString();
@@ -756,3 +773,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`PsiGestao API running on http://localhost:${PORT}${API_PREFIX}`);
 });
+
+
