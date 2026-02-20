@@ -16,7 +16,8 @@ initDb();
 const app = express();
 const upload = multer({ dest: path.join(__dirname, "..", "tmp") });
 
-const PORT = Number(process.env.PORT || 3001);
+const DEFAULT_PORT = 3001;
+let PORT = Number(process.env.PORT || DEFAULT_PORT);
 const API_PREFIX = process.env.API_PREFIX || "/api";
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "https://psigestao.develoi.com";
 
@@ -770,8 +771,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "Internal server error" });
 });
 
-app.listen(PORT, () => {
-  console.log(`PsiGestao API running on http://localhost:${PORT}${API_PREFIX}`);
-});
+function startServer(port) {
+  app.listen(port, () => {
+    console.log(`PsiGestao API running on http://localhost:${port}${API_PREFIX}`);
+  }).on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`Porta ${port} em uso. Tentando próxima porta...`);
+      startServer(port + 1);
+    } else {
+      throw err;
+    }
+  });
+}
+startServer(PORT);
 
 
